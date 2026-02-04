@@ -31,10 +31,15 @@ const props = defineProps<{
   isActive?: boolean
 }>()
 
-const maxOffset = 200
+// Game logic uses winLimit of 300, but visually we want max 120px movement
+// This keeps the characters from going past the center line
+const gameWinLimit = 300
+const visualMaxOffset = 120
 
 const tugStyle = computed(() => {
-  const clamped = Math.max(-maxOffset, Math.min(maxOffset, props.position))
+  // Normalize position from game range (-300 to 300) to visual range (-120 to 120)
+  const normalizedPosition = (props.position / gameWinLimit) * visualMaxOffset
+  const clamped = Math.max(-visualMaxOffset, Math.min(visualMaxOffset, normalizedPosition))
   return {
     transform: `translateX(${clamped}px)`
   }

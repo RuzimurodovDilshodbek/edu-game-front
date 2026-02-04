@@ -33,8 +33,8 @@ interface QuestionOrder {
 
 export function useGameState() {
   const config: GameConfig = {
-    step: 50,
-    winLimit: 300,
+    step: 30,        // Smaller steps = longer game, smoother movement
+    winLimit: 300,   // 10 correct answers to win (300/30=10)
     countdownStart: 3,
     wrongStepFactor: 1 / 3
   }

@@ -1,8 +1,8 @@
 <template>
   <div class="sack-arena">
     <div class="arena-bg">
-      <!-- Sky -->
-      <div class="sky"></div>
+      <!-- Title -->
+      <div class="game-title">Qop Poygasi</div>
 
       <!-- Track with racers -->
       <div class="track-container">
@@ -13,25 +13,25 @@
           class="track-image"
         />
 
-        <!-- Racers on track -->
-        <div class="racers">
-          <!-- Blue racer (left team) -->
-          <div class="racer-wrapper blue-racer" :style="blueRacerStyle">
+        <!-- Racers on track - side by side -->
+        <div class="racers-container">
+          <!-- Blue racer (left team) - front position -->
+          <div class="racer blue-racer" :style="blueRacerStyle">
             <img
               :src="blueCharacterImage"
               alt="Blue Racer"
               class="racer-image"
-              :class="{ hopping: leftProgress > 0.02 }"
+              :class="{ hopping: blueIsHopping }"
             />
           </div>
 
-          <!-- Red racer (right team) -->
-          <div class="racer-wrapper red-racer" :style="redRacerStyle">
+          <!-- Red racer (right team) - back position -->
+          <div class="racer red-racer" :style="redRacerStyle">
             <img
               :src="redCharacterImage"
               alt="Red Racer"
               class="racer-image"
-              :class="{ hopping: rightProgress > 0.02 }"
+              :class="{ hopping: redIsHopping }"
             />
           </div>
         </div>
@@ -39,7 +39,7 @@
 
       <!-- Game Info -->
       <div class="game-info">
-        To'g'ri javob bering va marraga yeting! (10 ta sakrash g'alaba)
+        Savolga javob bering va marraga yeting! (7 ta to'g'ri javob g'alaba)
       </div>
     </div>
   </div>
@@ -51,31 +51,55 @@ const props = defineProps<{
   rightProgress: number
 }>()
 
-// Race distance in percentage
-const raceDistance = 70 // percentage of track width
+// Race distance in percentage of track width
+const startPosition = 8
+const raceDistance = 65
 
-// Character images based on movement state
+// Hopping state - only hop briefly when progress changes
+const blueIsHopping = ref(false)
+const redIsHopping = ref(false)
+
+// Watch for progress changes to trigger hop animation
+watch(() => props.leftProgress, (newVal, oldVal) => {
+  if (newVal > oldVal) {
+    // Progress increased - do a hop
+    blueIsHopping.value = true
+    setTimeout(() => {
+      blueIsHopping.value = false
+    }, 400) // Hop for 400ms then stop
+  }
+})
+
+watch(() => props.rightProgress, (newVal, oldVal) => {
+  if (newVal > oldVal) {
+    // Progress increased - do a hop
+    redIsHopping.value = true
+    setTimeout(() => {
+      redIsHopping.value = false
+    }, 400)
+  }
+})
+
+// Character images - show hop image only while hopping
 const blueCharacterImage = computed(() => {
-  return props.leftProgress > 0.02
+  return blueIsHopping.value
     ? '/assets/themes/balap_karung/blue_hop.png'
     : '/assets/themes/balap_karung/blue_stand.png'
 })
 
 const redCharacterImage = computed(() => {
-  return props.rightProgress > 0.02
+  return redIsHopping.value
     ? '/assets/themes/balap_karung/red_hop.png'
     : '/assets/themes/balap_karung/red_stand.png'
 })
 
 // Racer position styles
 const blueRacerStyle = computed(() => ({
-  left: `${5 + props.leftProgress * raceDistance}%`,
-  transition: 'left 0.3s ease-out'
+  left: `${startPosition + props.leftProgress * raceDistance}%`
 }))
 
 const redRacerStyle = computed(() => ({
-  left: `${5 + props.rightProgress * raceDistance}%`,
-  transition: 'left 0.3s ease-out'
+  left: `${startPosition + props.rightProgress * raceDistance}%`
 }))
 </script>
 
@@ -94,110 +118,138 @@ const redRacerStyle = computed(() => ({
   height: 100%;
   background: linear-gradient(180deg,
     #87CEEB 0%,
-    #B0E0E6 40%,
-    #98FB98 60%,
+    #98D8C8 50%,
     #90EE90 100%
   );
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.sky {
-  flex: 1;
-  min-height: 40%;
+.game-title {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a365d;
 }
 
 .track-container {
   position: relative;
-  width: 100%;
-  padding: 0 20px;
-  margin-bottom: 30px;
+  width: 85%;
+  max-width: 700px;
 }
 
 .track-image {
   width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
 }
 
-.racers {
+.racers-container {
   position: absolute;
   top: 0;
-  left: 20px;
-  right: 20px;
+  left: 0;
+  right: 0;
   bottom: 0;
-  pointer-events: none;
 }
 
-.racer-wrapper {
+.racer {
   position: absolute;
-  bottom: 50%;
-  transform: translateY(50%);
+  transition: left 0.4s ease-out;
 }
 
+/* Blue racer - front lane */
 .blue-racer {
+  bottom: 15%;
   z-index: 2;
 }
 
+/* Red racer - back lane */
 .red-racer {
+  bottom: 35%;
   z-index: 1;
-  margin-bottom: -15px;
 }
 
 .racer-image {
-  height: 100px;
+  height: 90px;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(2px 3px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.1s ease-out;
 }
 
+/* Single hop animation when answering */
 .racer-image.hopping {
-  animation: hop 0.35s ease-in-out infinite;
+  animation: singleHop 0.4s ease-out;
 }
 
-@keyframes hop {
-  0%, 100% {
+@keyframes singleHop {
+  0% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+  60% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+  100% {
     transform: translateY(0) rotate(0deg);
   }
-  50% {
-    transform: translateY(-15px) rotate(3deg);
-  }
 }
 
+/* Game info */
 .game-info {
   position: absolute;
-  bottom: 10px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 100, 80, 0.8);
   color: white;
-  padding: 8px 20px;
-  border-radius: 20px;
+  padding: 10px 24px;
+  border-radius: 25px;
   font-size: 0.9rem;
   white-space: nowrap;
   z-index: 10;
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .track-container {
-    padding: 0 10px;
-  }
-
-  .racers {
-    left: 10px;
-    right: 10px;
+    width: 90%;
   }
 
   .racer-image {
-    height: 70px;
+    height: 75px;
+  }
+
+  .game-title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .racer-image {
+    height: 60px;
   }
 
   .game-info {
     font-size: 0.75rem;
-    padding: 6px 14px;
+    padding: 8px 16px;
+  }
+
+  .blue-racer {
+    bottom: 12%;
+  }
+
+  .red-racer {
+    bottom: 32%;
   }
 }
 
@@ -206,8 +258,17 @@ const redRacerStyle = computed(() => ({
     height: 50px;
   }
 
+  .game-title {
+    font-size: 1rem;
+    top: 15px;
+  }
+
+  .blue-racer {
+    bottom: 10%;
+  }
+
   .red-racer {
-    margin-bottom: -10px;
+    bottom: 28%;
   }
 }
 </style>
