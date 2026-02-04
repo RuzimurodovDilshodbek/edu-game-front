@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="pageTitle">Arqon Tortish:</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <audio id="backgroundMusic" src="/assets/media/audio.mp3" loop></audio>
+
+    <button class="home-btn" id="homeBtn" type="button" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+        <span id="homeBtnText">HOME</span>
+    </button>
+
+
+    <div class="language-selector">
+        <button class="lang-btn" data-lang="uz" type="button" aria-label="O'zbek tili">
+            <img src="https://flagcdn.com/w40/uz.png" alt="uz">
+        </button>
+
+        <button class="lang-btn" data-lang="ru" type="button" aria-label="Русский язык">
+            <img src="https://flagcdn.com/w40/ru.png" alt="ru">
+        </button>
+
+        <button class="lang-btn" data-lang="en" type="button" aria-label="English">
+            <img src="https://flagcdn.com/w40/gb.png" alt="en">
+        </button>
+    </div>
+
+    <header class="game-header">
+        <h1 id="gameTitle">ARQON TORTISH:</h1>
+        <p id="gameSubtitle" class="game-subtitle">
+            To'g'ri javob — arqon siz tomonga tortiladi. Noto'g'ri javob — arqon raqib tomonga siljiydi va darhol yangi savol chiqadi.
+        </p>
+    </header>
+
+    <div id="themeScreen" class="modal-overlay">
+        <div class="modal-content select-modal">
+            <h2>Permainan Matematika</h2>
+            <p class="modal-subtitle">Pilih Tema Permainan</p>
+            <div class="theme-cards">
+                <button class="theme-card theme-tarik" data-theme="rope" type="button">
+                    <img src="/assets/ui/icon_tarik.png" alt="Tarik Tambang">
+                    <div>
+                        <h3>Tarik Tambang</h3>
+                        <small>Inspired by Pak Guru Saloom</small>
+                    </div>
+                </button>
+                <button class="theme-card theme-panjat" data-theme="panjat" type="button">
+                    <img src="/assets/ui/icon_panjat.png" alt="Panjat Pinang">
+                    <div>
+                        <h3>Panjat Pinang</h3>
+                    </div>
+                </button>
+                <button class="theme-card theme-balap" data-theme="balap" type="button">
+                    <img src="/assets/ui/icon_balap_karung.png" alt="Balap Karung">
+                    <div>
+                        <h3>Balap Karung</h3>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="startScreen" class="modal-overlay">
+        <div class="modal-content start-modal">
+            <h2 id="modalTitle">JAMOALARNI TAYYORLANG</h2>
+
+            <div class="team-setup">
+                <div class="team-box team-left">
+                    <div class="team-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 id="team1Label">1-JAMOA (KO'K)</h3>
+                    <input type="text" id="teamLeftName" placeholder="Jamoa nomi" maxlength="20" autocomplete="off">
+                </div>
+
+                <div class="vs-divider">
+                    <span>VS</span>
+                </div>
+
+                <div class="team-box team-right">
+                    <div class="team-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 id="team2Label">2-JAMOA (QIZIL)</h3>
+                    <input type="text" id="teamRightName" placeholder="Jamoa nomi" maxlength="20" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="setup-nav" style="margin-top: 18px;">
+                <button id="startGameBtn" class="primary-btn nav-btn" type="button">
+                    <i class="fa-solid fa-play"></i>
+                    <span id="startBtnText">O'YINNI BOSHLASH</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="countdown" class="countdown-overlay"></div>
+
+    <main class="game-shell">
+        <div class="game-stage" id="gameStage">
+            <div class="game-board" id="gameBoard">
+
+
+                <div class="calculator-panel panel-left">
+                    <div class="panel-header">
+                        <h3 id="leftTeamHeader">1-Jamoa</h3>
+                        <div class="score-badge" id="leftScore">0</div>
+                    </div>
+
+                    <div class="problem-display" id="leftProblem">
+                        <span id="leftProblemText">Savol...</span>
+                    </div>
+
+                    <div class="quiz-keypad" id="leftQuizKeypad" aria-label="Answer options"></div>
+                </div>
+
+           
+                <div class="arena-container">
+                    <div class="arena-scoreboard">
+                        <div class="score-item">
+                            <span id="leftTeamName">Jamoa 1</span>
+                            <span class="score-value" id="leftCorrectCount">0</span>
+                        </div>
+                        <div class="timer-display">
+                            <i class="fa-solid fa-clock"></i>
+                            <span id="gameTimer">00:00</span>
+                        </div>
+                        <div class="score-item">
+                            <span id="rightTeamName">Jamoa 2</span>
+                            <span class="score-value" id="rightCorrectCount">0</span>
+                        </div>
+                    </div>
+
+                    <div class="arena">
+                        <div class="center-line"></div>
+                        <div class="theme-scene" id="themeScene">
+                            <div class="theme theme-rope" data-theme="rope">
+                                <div class="rope-container" id="ropeContainer">
+                                    <video id="ropeVideo" autoplay loop muted playsinline>
+                                        <source src="/assets/media/main.mp4" type="video/mp4">
+                                    </video>
+                                    <img id="ropeFallback" src="/assets/media/rope.svg" alt="Rope" style="display:none; width:100%; height:100%; object-fit:contain;">
+                                </div>
+                            </div>
+                            <div class="theme theme-panjat" data-theme="panjat">
+                                <div class="panjat-bg"></div>
+                                <img class="panjat-pole left" src="/assets/themes/pantaj_pinang/tiang.png" alt="Panjat Pinang Left">
+                                <img class="panjat-pole right" src="/assets/themes/pantaj_pinang/tiang.png" alt="Panjat Pinang Right">
+                                <img class="panjat-left" id="panjatLeft" src="/assets/themes/pantaj_pinang/standleft.png" alt="Left">
+                                <img class="panjat-right" id="panjatRight" src="/assets/themes/pantaj_pinang/standright.png" alt="Right">
+                            </div>
+                            <div class="theme theme-balap" data-theme="balap">
+                                <img class="balap-track" src="/assets/themes/balap_karung/track.png" alt="Track">
+                                <img class="balap-left" id="balapLeft" src="/assets/themes/balap_karung/blue_stand.png" alt="Left">
+                                <img class="balap-right" id="balapRight" src="/assets/themes/balap_karung/red_stand.png" alt="Right">
+                            </div>
+                        </div>
+
+                        <div id="win-video" class="win-video-wrap" style="display:none;" aria-hidden="true">
+                            <video id="blueWinVideo" class="win-video" style="display:none;" autoplay loop muted playsinline>
+                                <source src="/assets/media/win_blue.mp4" type="video/mp4">
+                            </video>
+                            <video id="redWinVideo" class="win-video" style="display:none;" autoplay loop muted playsinline>
+                                <source src="/assets/media/win_red.mp4" type="video/mp4">
+                            </video>
+                            <img id="winFallback" src="/assets/media/win.svg" alt="Winner" style="display:none; width:100%; height:100%; object-fit:contain;">
+                        </div>
+
+                        <div id="winnerDisplay" class="winner-overlay">
+                            <div class="winner-content">
+                                <div class="trophy-animation">
+                                    <i class="fa-solid fa-trophy"></i>
+                                </div>
+                                <h2 id="winnerName" class="winner-title"></h2>
+                                <p id="winnerMessage" class="winner-message">G'olib bo'ldi!</p>
+
+                                <div class="winner-stats">
+                                    <div class="stat-item">
+                                        <i class="fa-solid fa-check-circle"></i>
+                                        <span id="winnerCorrectAnswers">0</span>
+                                        <small id="correctAnswersLabel">to'g'ri javob</small>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="fa-solid fa-clock"></i>
+                                        <span id="winnerTime">00:00</span>
+                                        <small id="timeLabel">vaqt</small>
+                                    </div>
+                                </div>
+
+                                <button class="primary-btn" type="button" onclick="location.reload()">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                    <span id="playAgainText">QAYTA O'YNASH</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="calculator-panel panel-right">
+                    <div class="panel-header">
+                        <h3 id="rightTeamHeader">2-Jamoa</h3>
+                        <div class="score-badge" id="rightScore">0</div>
+                    </div>
+
+                    <div class="problem-display" id="rightProblem">
+                        <span id="rightProblemText">Savol...</span>
+                    </div>
+
+                    <div class="quiz-keypad" id="rightQuizKeypad" aria-label="Answer options"></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="game-footer">
+        <div class="social-links">
+            <a class="social-link" href="https://t.me/+Jo8Ih-Zvk_kwNjFi" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a class="social-link" href="https://instagram.com/norinjon_boltaboev" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </footer>
+
+  
+    <div class="view-controls" id="viewControls" aria-label="Zoom and fullscreen controls">
+        <button class="view-btn" id="zoomOutBtn" type="button" aria-label="Zoom out">
+            <i class="fa-solid fa-minus"></i>
+        </button>
+        <span class="view-label" id="zoomLabel">100%</span>
+        <button class="view-btn" id="zoomInBtn" type="button" aria-label="Zoom in">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <button class="view-btn" id="fullscreenBtn" type="button" aria-label="Toggle fullscreen">
+            <i class="fa-solid fa-expand"></i>
+        </button>
+    </div>
+
+    <script src="../config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

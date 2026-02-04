@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(md5sum:*)",
+      "Bash(dir /s /b \"D:\\\\work\\\\OSPanelV6\\\\home\\\\edugame\\\\files\")"
+    ]
+  }
+}

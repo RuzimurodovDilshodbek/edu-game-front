@@ -1,0 +1,6 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="500" height="300" viewBox="0 0 500 300">
+  <rect width="500" height="300" rx="18" fill="#e0f2fe"/>
+  <circle cx="160" cy="190" r="40" fill="#1d4ed8"/>
+  <circle cx="340" cy="190" r="40" fill="#dc2626"/>
+  <text x="250" y="150" text-anchor="middle" font-size="28" fill="#0f172a">G'OLIB</text>
+</svg>
